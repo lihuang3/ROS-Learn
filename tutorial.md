@@ -36,14 +36,14 @@ Before compiling the program, you need to
 **[declaring dependencies](http://wiki.ros.org/ROS/Tutorials/CreatingPackage)** 
 and **decalring an executable**. Start `roscore` first.
 
-**Building the workspace** `catkin_make` compiling all of the executables in all of its packages. 
+- **Building the workspace** `catkin_make` compiling all of the executables in all of its packages. 
 Because it's designed to build all of the packages in your workspace, this command must be run from 
 from your workspace directory.
 
-**Sourcing `setup.bash`** `source devel/setup.bash` Unless the directory structure changes, you only need to
+- **Sourcing `setup.bash`** `source devel/setup.bash` Unless the directory structure changes, you only need to
 run this once in each terminal.
 
-**Executing the program**
+- **Executing the program**
 ```rosrun <program_name>``` 
   
 **1.4** __A Publisher Program__
