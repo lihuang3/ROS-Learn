@@ -1,8 +1,8 @@
 ### ROS Tutorial Step-by-Step
 ### Program List
 - [`pubvel.cpp`](src/pubvel.cpp) Turtlesim with translation and rotation speed change.
-- [`turtle00.cpp`](src/turtle00.cpp) Turtlesim with translation and rotation speed change.
-- [`turtlexy.cpp`](src/turtlexy.cpp) Turtlesim with translation and rotation speed change.
+- [`turtle00.cpp`](src/turtle00.cpp) Turtlesim with closed-loop control and goal location is set as (0,0).
+- [`turtlexy.cpp`](src/turtlexy.cpp) Turtlesim with closed-loop control with user-input goal location.
 
 #### 0. Useful Terminal Command
 - `roscore` initialize a ROS master
