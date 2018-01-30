@@ -1,6 +1,9 @@
 ### ROS Tutorial Step-by-Step
 ### Program List
 - [`pubvel.cpp`](src/pubvel.cpp) Turtlesim with translation and rotation speed change.
+- [`turtle00.cpp`](src/turtle00.cpp) Turtlesim with translation and rotation speed change.
+- [`turtlexy.cpp`](src/turtlexy.cpp) Turtlesim with translation and rotation speed change.
+
 #### 0. Useful Terminal Command
 - `roscore` initialize a ROS master
 - `rostopic` list published topics
