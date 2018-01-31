@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
   ros::Publisher pub = nh.advertise<geometry_msgs::Twist>(
     "turtle1/cmd_vel", 1000);
 
-  ros::Subscriber sub = nh.subscribe("turtle1/pose", 1000, poseHandler);
+  ros::Subscriber sub = nh.subscribe("turtle1/pose", 1000, &poseHandler);
 
   // Seed the random number generator.
   srand(time(0));
