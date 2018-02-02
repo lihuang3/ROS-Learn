@@ -10,7 +10,8 @@
 - `rostopic` list published topics
 - `rosnode info`
 - `rqt_graph`
-
+- `rosrun turtlesim turtlesim_node`
+- `rosrun turtlesim turtle_teleop_key`
 
 #### 1. Creating a workspace and a package
 ROS initialization:
