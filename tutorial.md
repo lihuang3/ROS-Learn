@@ -4,6 +4,9 @@
 - [`turtle00.cpp`](src/turtle00.cpp) Turtlesim with closed-loop control and goal location is set as (0,0).
 - [`turtlexy.cpp`](src/turtlexy.cpp) Turtlesim with closed-loop control with user-input goal location.
 - [`turtlexyquiz.cpp`](src/turtlexyquiz.cpp) Turtlesim with closed-cloop control (better version)
+- [`turtlemeet.cpp`](src/turtlemeet.cpp)
+- [`turtlemeet.launch`](src/turtlemeet.launch)
+- [roslaunch Doc](http://wiki.ros.org/roslaunch/XML)
 
 #### 0. Useful Terminal Command
 - `roscore` initialize a ROS master
