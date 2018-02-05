@@ -1,4 +1,4 @@
-// This program steers a turtlesim turtle1 toward the xy locatins entered in the command line.
+// This program is collaborated by Li Huang and Haoran Zhao
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h> // For geometry_msgs::Twist
 #include <turtlesim/Pose.h>
@@ -55,7 +55,7 @@ int main(int argc, char ** argv) {
     ros::ServiceClient clearClient = nh.serviceClient<std_srvs::Empty>("/clear");
     std_srvs::Empty srv;
     clearClient.call(srv);
-
+    ros::service::waitForService("clear");
     // Create a client object for the spawn service.  This
     // needs to know the data type of the service and its
     // name.
@@ -68,8 +68,8 @@ int main(int argc, char ** argv) {
 
     // Fill in the request data members.
     req.x = 2+6*double(rand())/double(RAND_MAX);
-    req.y = 2*6*double(rand())/double(RAND_MAX);
-    req.theta = double(rand())/double(RAND_MAX);
+    req.y = 2+6*double(rand())/double(RAND_MAX);
+    req.theta = 2*M_PI*double(rand())/double(RAND_MAX);
     req.name = "turtle2";
 
     // Create a client object for the teleport service.
@@ -86,10 +86,14 @@ int main(int argc, char ** argv) {
 
     // Check for success and use the response.
     if(success) {
-    ROS_INFO_STREAM("Spawned a turtle named "
-      << resp.name);
+        ROS_INFO_STREAM("Spawned a turtle named "
+          << resp.name);
     } else {
-    ROS_ERROR_STREAM("Failed to spawn.");
+        ROS_ERROR_STREAM("Failed to spawn.");
+        req2.x = 2+6*double(rand())/double(RAND_MAX);
+        req2.y = 2+6*double(rand())/double(RAND_MAX);
+        req2.theta = 2*M_PI*double(rand())/double(RAND_MAX);
+        teleportAbsClient2.call(req2,resp2);
     }
 
     // Create a publisher object
@@ -102,15 +106,18 @@ int main(int argc, char ** argv) {
         // Create a subscriber object
     ros::Subscriber sub2 = nh.subscribe("turtle2/pose", 1000, &poseHandler2);
     // get the goal x and y locations
-//    if (argc == 3){
-//        goalx = atof(argv[1]);
-//        goaly = atof(argv[2]);
-//        // TODO 2: save the y location from the command input
-//        ROS_INFO_STREAM(std::setprecision(2) << std::fixed << "goal position=(" << goalx << "," <<goaly << ")");
-//    }else{
-//        ROS_INFO_STREAM(std::setprecision(2) << std::fixed << "You need to supply an x and y output");
-//        return -1;
-//    }
+    if (argc == 3){
+        req1.x = atof(argv[1]);
+        req1.y = atof(argv[2]);
+        req1.theta = 2*M_PI*double(rand())/double(RAND_MAX);;
+        teleportAbsClient1.call(req1,resp1);
+        ROS_INFO_STREAM("arg0="<<atof(argv[0])<<"arg1"<<atof(argv[1])<<"arg2"<<atof(argv[2]));
+    }else{
+        req1.x = 2+6*double(rand())/double(RAND_MAX);
+        req1.y = 2+6*double(rand())/double(RAND_MAX);
+        req1.theta = 2*M_PI*double(rand())/double(RAND_MAX);
+        teleportAbsClient1.call(req1,resp1);
+    }
     // Loop at 10 Hz until the node is shut down.
     ros::Rate rate(10);
     // control variables
@@ -164,10 +171,10 @@ int main(int argc, char ** argv) {
         distErr = sqrt( pow(turtlePose2.x-turtlePose1.x,2)+ pow(turtlePose2.y-turtlePose1.y,2) ); //TODO 4: calculate the distance
         angGoal = atan2( (goaly-turtlePose1.y),  (goalx-turtlePose1.x) );
         angErr  = atan2(sin(angGoal-turtlePose1.theta), cos(angGoal-turtlePose1.theta));  // TODO 5: use atan2 to calculate the angular error
-        if (distErr<0.1 && poseInitialized2 && poseInitialized1){
-            ROS_INFO_STREAM(std::fixed << "Mission Completed!");
-            ros::shutdown();
-        }
+//        if (distErr<0.1 && poseInitialized2 && poseInitialized1){
+//            ROS_INFO_STREAM(std::fixed << "Mission Completed!");
+//            return 0;
+//        }
         // Compute the angle angErr and set
         // turtlePose1.theta+=angErr, turtlePose2.theta+=angErr.
         // Hence two turtles turn the same angle to meet.
@@ -182,8 +189,8 @@ int main(int argc, char ** argv) {
             msg1.linear.x = 0.2; // if angular error is large, turn (mostly) in place
             msg2.linear.x = 0.2;
          }else{
-            msg1.linear.x = fmin(distErr, 1.0);
-            msg2.linear.x = fmin(distErr, 1.0);
+            msg1.linear.x = fmin(distErr, 3.0);
+            msg2.linear.x = fmin(distErr, 3.0);
          }
         msg1.angular.z = 2*angErr;  //TODO 6: what happens if you change this control gain from 1/2?
         msg2.angular.z = 2*angErr;
@@ -200,6 +207,7 @@ int main(int argc, char ** argv) {
             << " linear2=" << msg2.linear.x << " angular2=" << msg2.angular.z
             << " turtle2pos=("<< turtlePose2.x<<","<<turtlePose2.y<<","<<turtlePose2.theta<<")");
         if(distErr < 0.1 && poseInitialized1 && poseInitialized2 ){ // return if at the goal.
+            ROS_INFO_STREAM("Mission Completed!");
             return 0;
         }
 

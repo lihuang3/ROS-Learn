@@ -1,0 +1,26 @@
+<launch>
+  <node
+    pkg="turtlesim"
+    type="turtlesim_node"
+    name="turtlesim"
+    respawn="true"
+  />
+  <node
+    pkg="turtlesim"
+    type="turtle_teleop_key"
+    name="teleop_key"
+    respawn="true"
+    launch-prefix="xterm -e"
+  />
+  <node
+    pkg="agitr"
+    type="turtlemeet"
+    name="turtle_meet"
+    respawn="true"
+    output="screen"
+    args ="$(arg x) $(arg y)"
+  />
+	
+  <arg name="x"/>
+  <arg name="y"/>
+</launch>
