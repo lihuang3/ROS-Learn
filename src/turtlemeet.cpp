@@ -8,12 +8,23 @@
 #include <std_srvs/Empty.h> // for clearing the screen
 // The srv class for the service.
 #include <turtlesim/Spawn.h>
+#include <turtlesim/TeleportAbsolute.h>  // for setpen
 
 turtlesim::Pose turtlePose1, turtlePose2;  // global variable for the turtle's pose.
 // Note: global variables is generally bad programming practice.
 bool poseInitialized1 = false, poseInitialized2 = false;
 
+// Specify arena boundaries
+namespace arena{
+    float x1 = 0.1;
+    float x2 = 11.0;
+    float y1 = 0.1;
+    float y2 = 11.0;
+}
+
+// Define dx = X1-X2, dy = Y1-Y2, du = Vx2-Vx1, dv = Vy2-Vy1
 float dx, dy, du, dv;
+
 // A callback function. Executed each time a new pose message arrives.
 void poseHandler1(const turtlesim::Pose& msg) {
     // TODO 2:  copy the msg pose to your global variable
@@ -56,10 +67,18 @@ int main(int argc, char ** argv) {
     turtlesim::Spawn::Response resp;
 
     // Fill in the request data members.
-    req.x = 10*double(rand())/double(RAND_MAX);
-    req.y = 10*double(rand())/double(RAND_MAX);
+    req.x = 2+6*double(rand())/double(RAND_MAX);
+    req.y = 2*6*double(rand())/double(RAND_MAX);
     req.theta = double(rand())/double(RAND_MAX);
     req.name = "turtle2";
+
+    // Create a client object for the teleport service.
+    ros::ServiceClient teleportAbsClient1 = nh.serviceClient<turtlesim::TeleportAbsolute>("turtle1/teleport_absolute");
+    ros::ServiceClient teleportAbsClient2 = nh.serviceClient<turtlesim::TeleportAbsolute>("turtle2/teleport_absolute");
+
+    turtlesim::TeleportAbsolute::Request req1, req2;
+    turtlesim::TeleportAbsolute::Response resp1, resp2;
+
 
     // Actually call the service.  This won't return until
     // the service is complete.
@@ -83,15 +102,15 @@ int main(int argc, char ** argv) {
         // Create a subscriber object
     ros::Subscriber sub2 = nh.subscribe("turtle2/pose", 1000, &poseHandler2);
     // get the goal x and y locations
-    if (argc == 3){
-        goalx = atof(argv[1]);
-        goaly = atof(argv[2]);
-        // TODO 2: save the y location from the command input
-        ROS_INFO_STREAM(std::setprecision(2) << std::fixed << "goal position=(" << goalx << "," <<goaly << ")");
-    }else{
-        ROS_INFO_STREAM(std::setprecision(2) << std::fixed << "You need to supply an x and y output");
-        return -1;
-    }
+//    if (argc == 3){
+//        goalx = atof(argv[1]);
+//        goaly = atof(argv[2]);
+//        // TODO 2: save the y location from the command input
+//        ROS_INFO_STREAM(std::setprecision(2) << std::fixed << "goal position=(" << goalx << "," <<goaly << ")");
+//    }else{
+//        ROS_INFO_STREAM(std::setprecision(2) << std::fixed << "You need to supply an x and y output");
+//        return -1;
+//    }
     // Loop at 10 Hz until the node is shut down.
     ros::Rate rate(10);
     // control variables
@@ -104,6 +123,43 @@ int main(int argc, char ** argv) {
         ros::spinOnce();
         //compute control parameters
 
+        // Apply teleport if out-of-boundary
+        if (poseInitialized1 && poseInitialized2)
+        {
+            if( (turtlePose1.x<arena::x1) || (turtlePose1.x>arena::x2) ||
+            (turtlePose1.y<arena::y1) || (turtlePose1.y>arena::y2))
+            {
+                req1.x = turtlePose1.x;
+                req1.y = turtlePose1.y;
+                req1.theta = turtlePose1.theta;
+                if      (turtlePose1.x<arena::x1){req1.x = arena::x2-0.05;}
+                else if (turtlePose1.x>arena::x2){req1.x = arena::x1+0.05;}
+                if      (turtlePose1.y<arena::y1){req1.y = arena::y2-0.05;}
+                else if (turtlePose1.y>arena::y2){req1.y = arena::y1+0.05;}
+
+            ROS_INFO_STREAM("\nturtle1 out of boundary! Teleporting to a new location\n");
+            bool success1 = teleportAbsClient1.call(req1,resp1);
+
+            }
+
+            if( (turtlePose2.x<arena::x1) || (turtlePose2.x>arena::x2) ||
+            (turtlePose2.y<arena::y1) || (turtlePose2.y>arena::y2))
+            {
+                req2.x = turtlePose2.x;
+                req2.y = turtlePose2.y;
+                req2.theta = turtlePose2.theta;
+                if      (turtlePose2.x<arena::x1){req2.x = arena::x2-0.05;}
+                else if (turtlePose2.x>arena::x2){req2.x = arena::x1+0.05;}
+                if      (turtlePose2.y<arena::y1){req2.y = arena::y2-0.05;}
+                else if (turtlePose2.y>arena::y2){req2.y = arena::y1+0.05;}
+
+            ROS_INFO_STREAM("\nturtle2 out of boundary! Teleporting to a new location\n");
+            bool success2 = teleportAbsClient2.call(req2,resp2);
+
+            }
+
+        }
+
 
         distErr = sqrt( pow(turtlePose2.x-turtlePose1.x,2)+ pow(turtlePose2.y-turtlePose1.y,2) ); //TODO 4: calculate the distance
         angGoal = atan2( (goaly-turtlePose1.y),  (goalx-turtlePose1.x) );
@@ -112,7 +168,9 @@ int main(int argc, char ** argv) {
             ROS_INFO_STREAM(std::fixed << "Mission Completed!");
             ros::shutdown();
         }
-
+        // Compute the angle angErr and set
+        // turtlePose1.theta+=angErr, turtlePose2.theta+=angErr.
+        // Hence two turtles turn the same angle to meet.
         dx = turtlePose1.x-turtlePose2.x;
         dy = turtlePose1.y-turtlePose2.y;
         du = -cos(turtlePose1.theta) + cos(turtlePose2.theta);
@@ -120,9 +178,9 @@ int main(int argc, char ** argv) {
         angErr = atan2(  (-dv*dx+du*dy) , (du*dx+dv*dy));
 
         // control law
-        if( fabsf(angErr) > 0.1){
-            msg1.linear.x = 0.1; // if angular error is large, turn (mostly) in place
-            msg2.linear.x = 0.1;
+        if( fabsf(angErr) > 1.0){
+            msg1.linear.x = 0.2; // if angular error is large, turn (mostly) in place
+            msg2.linear.x = 0.2;
          }else{
             msg1.linear.x = fmin(distErr, 1.0);
             msg2.linear.x = fmin(distErr, 1.0);
@@ -136,14 +194,16 @@ int main(int argc, char ** argv) {
         pub2.publish(msg2);
 
         // Send a message to rosout with the details.
-        ROS_INFO_STREAM("vel command:"
-            << " linear=" << msg1.linear.x << " angular=" << msg1.angular.z
-            << " pose=("<< turtlePose1.x<<","<<turtlePose1.y<<","<<turtlePose1.theta<<"), angErr="<<angErr
-            << " linear=" << msg2.linear.x << " angular=" << msg2.angular.z
-            << " pose=("<< turtlePose2.x<<","<<turtlePose2.y<<","<<turtlePose2.theta<<"), angErr="<<angErr);
-        if(distErr < 0.2 && poseInitialized1 && poseInitialized2 ){ // return if at the goal.
+        ROS_INFO_STREAM(std::setprecision(3) << std::fixed << "vel command:"
+            << " linear1=" << msg1.linear.x << " angular1=" << msg1.angular.z
+            << " turtle1pos=("<< turtlePose1.x<<","<<turtlePose1.y<<","<<turtlePose1.theta<<"),"
+            << " linear2=" << msg2.linear.x << " angular2=" << msg2.angular.z
+            << " turtle2pos=("<< turtlePose2.x<<","<<turtlePose2.y<<","<<turtlePose2.theta<<")");
+        if(distErr < 0.1 && poseInitialized1 && poseInitialized2 ){ // return if at the goal.
             return 0;
         }
+
+
 
         // Wait until it's time for another interaction
         rate.sleep();//
