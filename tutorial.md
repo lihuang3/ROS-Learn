@@ -139,8 +139,8 @@ when messages will arrive. We must place any code that responds to incoming
 messages inside a callback function, which ROS calls once for each arriving message.
 ```
 void function_name(const package_name::type_name &msg) {
-...
-}
+        ...
+    }
 ```
 Notice that subscriber callback functions have a void return type.
 
@@ -162,6 +162,23 @@ callbacks.
 
 #### 3. Service
 **3.1** __Create a Client Object__
+- Create a Client Object
 ```
 ros::ServiceClient teleportAbsClient = nh.serviceClient<turtlesim::TeleportAbsolute>("turtle1/teleport_absolute");
 ```
+- Create the request and response objects
+```angularjs
+turtlesim::TeleportAbsolute::Request reqt;
+turtlesim::TeleportAbsolute::Response respt;
+```
+- Assign value to request variables
+```angularjs
+reqt.x = 10*double(rand())/double(RAND_MAX);
+reqt.y = 10*double(rand())/double(RAND_MAX);
+reqt.theta = 0;
+```
+- Actually call the service. This won't return until the service is complete.
+```angularjs
+bool success = teleportAbsClient.call(reqt,respt);
+```
+
