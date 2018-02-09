@@ -162,9 +162,40 @@ write a loop that does that other work and calls `ros::spinOnce()` periodically 
 callbacks.
 
 
+#### 4. Parameters
+In addition to the messages that we’ve studied so far, ROS provides another mechanism
+called parameters to get information to nodes. 
+The idea is that a centralized parameter server keeps track of a collection of values—things like integers, floating point numbers,
+strings, or other data—each identified by a short string name.
+Because parameters must be actively queried by the nodes that are interested in their values, they are most
+suitable for configuration information that will not change (much) over time.
 
-#### 3. Service
-**3.1** __Create a Client Object__
+**4.1** __Accessing Parameters from the Command Line__
+- `rosparam list` Listing parameters
+- `rosparam get parameter_name` Querying the parameter sever for the value of a parameter.  
+  `rosparam get namespace` retrieve the values of every parameter in a namespace.    
+  `rosparam get /` by asking about the global namespace, we can see the values of every parameter all at once
+- `rosparam set parameter_name parameter_value` assign a value to a parameter. This command can modify the values of existing parameters or create new ones.
+- 
+  
+The important thing to notice here is that updated parameter values are not automatically “pushed” to nodes. Instead, nodes that care about changes to some or all of their
+parameters must explicitly ask the parameter server for those values.
+
+**4.2** __ Accessing Parameters from C++__
+- `void ros::param::set(parameter_name, input_value);`
+- `bool ros::param::get(parameter_name, output_value);`
+   
+In both cases, the parameter name is a string, which can be a global, relative, or private
+name. The input value for set can be a std::string , a bool , an int , or a double ; the output
+value for get should be a variable (which is passed by reference) of one of those types.
+The get function returns true if the value was read successfully and false if there was a
+problem, usually indicating that the requested parameter has not been assigned a value.
+
+Here's an example of C++ parameter set:
+![alt text][/Images/ROS_Set_Param.png]
+
+#### 5. Service
+**5.1** __Create a Client Object__
 - Create a Client Object
 ```
 ros::ServiceClient teleportAbsClient = nh.serviceClient<turtlesim::TeleportAbsolute>("turtle1/teleport_absolute");
@@ -184,4 +215,5 @@ reqt.theta = 0;
 ```angularjs
 bool success = teleportAbsClient.call(reqt,respt);
 ```
+
 
