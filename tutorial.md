@@ -167,8 +167,6 @@ callbacks.
 
 
 #### 4. Parameters
-**4.0** __Code References__
-- [`turtlemeet2.cpp`](src/turtlemeet2.cpp)
 
 In addition to the messages that we’ve studied so far, ROS provides another mechanism
 called parameters to get information to nodes. 
@@ -176,6 +174,10 @@ The idea is that a centralized parameter server keeps track of a collection of v
 strings, or other data—each identified by a short string name.
 Because parameters must be actively queried by the nodes that are interested in their values, they are most
 suitable for configuration information that will not change (much) over time.
+
+**4.0** __Code References__
+- [`turtlemeet2.cpp`](src/turtlemeet2.cpp)
+
 
 **4.1** __Accessing Parameters from the Command Line__
 - `rosparam list` Listing parameters
@@ -188,7 +190,7 @@ suitable for configuration information that will not change (much) over time.
 The important thing to notice here is that updated parameter values are not automatically “pushed” to nodes. Instead, nodes that care about changes to some or all of their
 parameters must explicitly ask the parameter server for those values.
 
-**4.2** __ Accessing Parameters from C++__
+**4.2** __Accessing Parameters from C++__
 - `void ros::param::set(parameter_name, input_value);`
 - `bool ros::param::get(parameter_name, output_value);`
    
