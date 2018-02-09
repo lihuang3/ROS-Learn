@@ -1,5 +1,5 @@
 ### ROS Tutorial Step-by-Step 
-### Reference: [A Gentle Introduction to ROS](https://www.cse.sc.edu/~jokane/agitr/)
+### Reference: [A Gentle Introduction to ROS by Jason M. O'Kane](https://www.cse.sc.edu/~jokane/agitr/)
 ### Program List
 - [`pubvel.cpp`](src/pubvel.cpp) Turtlesim with translation and rotation speed change.
 - [`turtle00.cpp`](src/turtle00.cpp) Turtlesim with closed-loop control and goal location is set as (0,0).
@@ -8,6 +8,7 @@
 - [`turtlemeet.cpp`](src/turtlemeet.cpp)
 - [`turtlemeet.launch`](src/turtlemeet.launch)
 - [roslaunch Doc](http://wiki.ros.org/roslaunch/XML)
+- [`turtlemeet2.cpp`](src/turtlemeet2.cpp)
 
 
 
@@ -166,6 +167,9 @@ callbacks.
 
 
 #### 4. Parameters
+**4.0** __Code References__
+- [`turtlemeet2.cpp`](src/turtlemeet2.cpp)
+
 In addition to the messages that we’ve studied so far, ROS provides another mechanism
 called parameters to get information to nodes. 
 The idea is that a centralized parameter server keeps track of a collection of values—things like integers, floating point numbers,
