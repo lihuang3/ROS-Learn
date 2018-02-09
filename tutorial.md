@@ -192,7 +192,7 @@ The get function returns true if the value was read successfully and false if th
 problem, usually indicating that the requested parameter has not been assigned a value.
 
 Here's an example of C++ parameter set:
-![alt text](/Images/ROS_Set_Param.png)
+![alt text](/Images/ROS_Set_Param.png=625*100)
 
 #### 5. Service
 **5.1** __Create a Client Object__
