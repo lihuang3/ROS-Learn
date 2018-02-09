@@ -196,6 +196,20 @@ Here's an example of C++ parameter set:
 <img src="https://github.com/lihuang3/ROS-Learn/blob/master/Images/ROS_Set_Param.png" width="625">
 </p>
 
+Here's an example of C++ parameter get:
+this program requires a value for a parameter called max_vel in its private name-
+space, which must be set before the program starts:
+```angularjs
+rosparam set /publish_velocity/max_vel 0.1
+```
+If that parameter is not available, the program generates a fatal error and terminates.
+
+<p align="center">
+<img src="https://github.com/lihuang3/ROS-Learn/blob/master/Images/ROS_Set_Param2.png" width="625">
+</p>
+
+**4.3** __Setting Parameters in Launch Files__
+
 #### 5. Service
 **5.1** __Create a Client Object__
 - Create a Client Object
