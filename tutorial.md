@@ -1,4 +1,5 @@
-### ROS Tutorial Step-by-Step
+### ROS Tutorial Step-by-Step 
+### Reference: [A Gentle Introduction to ROS]((https://www.cse.sc.edu/~jokane/agitr/))
 ### Program List
 - [`pubvel.cpp`](src/pubvel.cpp) Turtlesim with translation and rotation speed change.
 - [`turtle00.cpp`](src/turtle00.cpp) Turtlesim with closed-loop control and goal location is set as (0,0).
@@ -7,6 +8,8 @@
 - [`turtlemeet.cpp`](src/turtlemeet.cpp)
 - [`turtlemeet.launch`](src/turtlemeet.launch)
 - [roslaunch Doc](http://wiki.ros.org/roslaunch/XML)
+
+
 
 #### 0. Useful Terminal Command
 - `roscore` initialize a ROS master
