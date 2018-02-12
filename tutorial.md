@@ -265,9 +265,10 @@ whose job is to actually carry out the service call:
 ros::ServiceClient client = node_handle.serviceClient<service_type>(service_name);
 ```
 for example:
-```
+```angularjs
 ros::ServiceClient teleportAbsClient = nh.serviceClient<turtlesim::TeleportAbsolute>("turtle1/teleport_absolute");
 ```
+
 - The `node_handle` is the usual `ros::NodeHandle` object. We’re calling its service-Client method.
 - The `service_type` is the name of the service object defined in the header file we
 included above. In the example, it’s `turtlesim::Spawn`.
