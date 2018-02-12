@@ -229,13 +229,53 @@ communication called __service calls__. Service calls differ from messages in tw
 - Service calls implement one-to-one communication. Each service call is initiated by one node, and
 the response goes back to that same node.
 
+A service call includes that a clieny node sends some data called a __request node__ and waits for a reply.
+The server, having received this request, takes some action (computing some-
+thing, configuring hardware or software, changing its own behavior, etc.) and sends some
+data called a __response__ back to the client.
 
 
 
-**5.1** __Create a Client Object__
-- Create a Client Object
+**5.1** __Calling Services from the Command Line__
+- `rosservice list`: listing all services.
+- `rosnode info node-name`: listing services by node.
+- `rosservice node service-name`: finding the node offering a service, that is, to see which node offers a given service.
+- `rosservice info service-name`: finding the data type of a service.
+- `rossrv show service-data-type-name`: inspecting service data types. In this case, the data before the dashes ( --- ) are the elements of the request. This is the
+information that the client node sends to the server node. Everything after the dashes is
+the response, or information that the server sends back from the client when the server
+has finished acting on the request.
+- `rosservice call service-name request-content`: calling services from the command line.
+
+
+
+**5.2** __A Client Program__
+
+__Deaclaring the Request and Response Types__   
+
+Every service data has an associate C++ header file that we must include, for example, to include the definition of a class called `turtlesim::Spawn`, which defines the data types for both
+request and repsonse: `#include <turtlesim/Spawn.h>`   
+
+
+__Create a Client Object__
+
+After initialization by `ros::init` and creating a `NideHandle object`, we must create an object of type ros::ServiceClient ,
+whose job is to actually carry out the service call:
+```angularjs
+ros::ServiceClient client = node_handle.serviceClient<service_type>(service_name);
+```
+for example:
 ```
 ros::ServiceClient teleportAbsClient = nh.serviceClient<turtlesim::TeleportAbsolute>("turtle1/teleport_absolute");
+```
+- The `node_handle` is the usual `ros::NodeHandle` object. We’re calling its service-Client method.
+- The `service_type` is the name of the service object defined in the header file we
+included above. In the example, it’s `turtlesim::Spawn`.
+- The `service_name` is a string naming the service that we want to call. This should
+be a relative name, but can also be a global name. The example uses the relative
+name "spawn" .
+```
+
 ```
 - Create the request and response objects
 ```angularjs
@@ -253,5 +293,7 @@ reqt.theta = 0;
 bool success = teleportAbsClient.call(reqt,respt);
 ```
 
-
+<p align="center">
+<img src="https://github.com/lihuang3/ROS-Learn/blob/master/Images/service_call_program.png" width="600">
+</p>
 
