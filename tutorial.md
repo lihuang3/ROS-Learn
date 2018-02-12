@@ -223,7 +223,7 @@ If that parameter is not available, the program generates a fatal error and term
 Messages are the primary method for communication in ROS, but they do have some limitations. A alternativel method of 
 communication called __service calls__. Service calls differ from messages in two ways.
 
-<img align = "right" src="https://github.com/lihuang3/ROS-Learn/blob/master/Images/service_call.png" width="300">
+<img [sada] align = "right" src="https://github.com/lihuang3/ROS-Learn/blob/master/Images/service_call.png" width="300">
 
 - Service calls are bi-directional: one node sends info to another node and waits for a repsonse.
 - Service calls implement one-to-one communication. Each service call is initiated by one node, and
