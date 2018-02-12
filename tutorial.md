@@ -275,9 +275,7 @@ included above. In the example, it’s `turtlesim::Spawn`.
 - The `service_name` is a string naming the service that we want to call. This should
 be a relative name, but can also be a global name. The example uses the relative
 name "spawn" .
-```
 
-```
 - Create the request and response objects
 ```angularjs
 turtlesim::TeleportAbsolute::Request reqt;
