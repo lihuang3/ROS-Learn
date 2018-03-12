@@ -296,3 +296,29 @@ The complete service call program:
 <img src="https://github.com/lihuang3/ROS-Learn/blob/master/Images/service_call_program.png" width="600">
 </p>
 
+
+#### 6. Turtlebot
+
+##### 6.0 Code source
+- [`Right wall following`](src/right_wall_follow.py): to make the Turtlebot	simulator work,	we need	to publish `Twist
+messages` to a topic named `cmd_vel_mux/input/teleop`. That	is,	we need	to remap our `cmd_vel` message so that they	are	published on that topic	instead. We	can	use	the	ROSremapping syntax	to do this on the command line, without	changing our source	code: run this code by
+```angularjs
+$ python right_wall_follow.py cmd_vel:=cmd_vel_mux/input/teleop
+
+``` 
+- [`FPV`](src/follower_opencv.py): robot first-person-view using opencv  
+
+##### 6.1 Turtlebot installation
+Install Turtlebot for ros kinetic:
+```angularjs
+$ sudo apt-get install ros-kinetic-turtlebot ros-kinetic-turtlebot-apps 
+ros-kinetic-turtlebot-interactions ros-kinetic-turtlebot-simulator 
+ros-kinetic-kobuki-ftdi
+```
+
+```angularjs
+$ echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
+```
+```angularjs
+$ export TURTLEBOT_GAZEBO_WORLD_FILE=/opt/ros/kinetic/share/turtlebot_gazebo/worlds/playground.world
+```
