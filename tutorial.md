@@ -322,3 +322,8 @@ $ echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 ```angularjs
 $ export TURTLEBOT_GAZEBO_WORLD_FILE=/opt/ros/kinetic/share/turtlebot_gazebo/worlds/playground.world
 ```
+
+##### 6.1 Followbot 
+- [`FPV`](src/follower_opencv.py): robot first-person-view using opencv  
+- [`Line detection`](src/follower_color_filter)
+-[opencv doc](http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_contours/py_contour_properties/py_contour_properties.html)
