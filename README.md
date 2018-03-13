@@ -323,7 +323,22 @@ $ echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 $ export TURTLEBOT_GAZEBO_WORLD_FILE=/opt/ros/kinetic/share/turtlebot_gazebo/worlds/playground.world
 ```
 
-##### 6.2 Followbot 
+##### 6.2 Wanderbot
+- [`Right wall following`](src/right_wall_follow.py)
+
+In a new terminal, start Turtlebot simulation:
+```angularjs
+$ roslaunch turtlebot_gazebo turtlebot_world.launch
+```
+then run the program above.
+
+##### 6.3 Followbot 
 - [`FPV`](src/follower_opencv.py): robot first-person-view using opencv  
 - [`Line detection`](src/follower_color_filter)
 - [opencv doc](http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_contours/py_contour_properties/py_contour_properties.html)
+
+In the root folder of Turtlebot workspace, `source devel/setup.bash` and then start Turtlebot simulation:
+```angularjs
+$ roslaunch followbot course.launch
+```
+
